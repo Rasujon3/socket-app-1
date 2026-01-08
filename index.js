@@ -8,8 +8,8 @@ const { Server } = require("socket.io");
 const io = new Server(expressServer);
 
 io.on("connection", function (socket) {
-  //   console.log("New User Connected.");
-  socket.on("message", function (msg) {
+  console.log("New User Connected.");
+  socket.on("MyEvent", function (msg) {
     console.log(msg);
   });
 
