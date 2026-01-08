@@ -7,14 +7,17 @@ const port = 3000;
 const { Server } = require("socket.io");
 const io = new Server(expressServer);
 
-let buyNsp = io.of("/buy");
-buyNsp.on("connection", function (socket) {
-  buyNsp.emit("MyEvent", "hello buy");
-});
+io.on("connection", function (socket) {
+  socket.join("kitchen-room");
+  let sizeOfKitchen = io.sockets.adapter.rooms.get("kitchen-room").size;
+  io.sockets
+    .in("kitchen-room")
+    .emit("cooking", "Fried rice cooking. " + sizeOfKitchen);
+  io.sockets.in("kitchen-room").emit("boiling", "Boiling water.");
 
-let sellNsp = io.of("/sell");
-sellNsp.on("connection", function (socket) {
-  sellNsp.emit("MyEvent", "hello sell");
+  socket.join("bed-room");
+  io.sockets.in("bed-room").emit("sleep", "I am sleeping...");
+  io.sockets.in("bed-room").emit("rest", "I am taking rest.");
 });
 
 app.get("/", (req, res) => {
