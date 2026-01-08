@@ -7,6 +7,20 @@ const port = 3000;
 const { Server } = require("socket.io");
 const io = new Server(expressServer);
 
+io.on("connection", function (socket) {
+  console.log("New User Connected.");
+
+  setInterval(function () {
+    let d = new Date();
+    let t = d.getTime();
+    socket.send(t);
+  }, 10);
+
+  socket.on("disconnect", function () {
+    console.log("User Disconnected.");
+  });
+});
+
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
