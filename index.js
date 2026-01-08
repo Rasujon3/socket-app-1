@@ -7,21 +7,14 @@ const port = 3000;
 const { Server } = require("socket.io");
 const io = new Server(expressServer);
 
-io.on("connection", function (socket) {
-  console.log("New User Connected.");
-  socket.on("MyEvent", function (msg) {
-    console.log(msg);
-  });
+let buyNsp = io.of("/buy");
+buyNsp.on("connection", function (socket) {
+  buyNsp.emit("MyEvent", "hello buy");
+});
 
-  //   setInterval(function () {
-  //     let d = new Date();
-  //     let t = d.getTime();
-  //     socket.emit("myEvent", t);
-  //   }, 10);
-
-  //   socket.on("disconnect", function () {
-  //     console.log("User Disconnected.");
-  //   });
+let sellNsp = io.of("/sell");
+sellNsp.on("connection", function (socket) {
+  sellNsp.emit("MyEvent", "hello sell");
 });
 
 app.get("/", (req, res) => {
